@@ -1,10 +1,13 @@
+import { alertDetails } from "@/atom/global";
 import { ThemedTextInput } from "@/components/themed-input";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedTile } from "@/components/themed-tile";
 import { ThemedView } from "@/components/themed-view";
 import AppButton from "@/components/ui/appButton";
-import { useNavigation } from "expo-router";
+import { signUpUser } from "@/data/auth";
+import { Link, useNavigation } from "expo-router";
 import { Formik } from "formik";
+import { useAtom } from "jotai";
 import { StyleSheet } from "react-native";
 import * as Yup from "yup";
 
@@ -15,16 +18,34 @@ const LoginSchema = Yup.object().shape({
     password: Yup.string().min(6, 'Too Short!').max(20, 'Too Long!').required('required'),
 });
 
-export default function LoginScreen() {
+export default function SignUpScreen() {
     const navigation = useNavigation();
+
+    const [alert, setAlert] = useAtom(alertDetails);
+    const handleSignUp = async (value : any) => {
+        const res = await signUpUser(value.email , value.password);
+        if(res.success){
+            navigation.navigate("login");
+        } else {
+            setAlert({
+                type: "error",
+                visible: true,
+                title: "SignUp Failed",
+                message: "User already exists",
+                onClose: () => setAlert(prev => ({...prev, visible: false}))
+            });
+        }
+
+    }
+
     return <ThemedView style={styles.container}>
         <ThemedText style={styles.title} type="title">
-            Login
+            SignUp
         </ThemedText>
         <ThemedTile style={styles.form} >
             <Formik
-                initialValues={{ email: '', password: '' }}
-                onSubmit={values => console.log(values)}
+                initialValues={{ email: '', password: '' , confirmPassword: ''}}
+                onSubmit={handleSignUp}
                 validationSchema={LoginSchema}>
                 {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
                     <>    
@@ -34,7 +55,7 @@ export default function LoginScreen() {
                             onBlur={handleBlur('email')}
                             value={values.email}
                         />
-                        {errors.email ? <ThemedText type="error" >{errors.email}</ThemedText>:
+                        {errors.email ? <ThemedText type="error" >{errors.email}</ThemedText> : 
                         <ThemedText type="default"></ThemedText>}
                         <ThemedTextInput 
                             placeholder="Password*"
@@ -46,10 +67,22 @@ export default function LoginScreen() {
                         {errors.password ? <ThemedText type="error" >
                                 {errors.password}
                                 </ThemedText> : <ThemedText type="default"></ThemedText>}
+                        <ThemedTextInput 
+                            placeholder="Confirm Password*"
+                            secureTextEntry
+                            onChangeText={handleChange('confirmPassword')}
+                            onBlur={handleBlur('confirmPassword')}
+                            value={values.confirmPassword}
+                        />
+                        {errors.confirmPassword ? <ThemedText type="error" >
+                                {errors.confirmPassword}
+                                </ThemedText> : <ThemedText type="default"></ThemedText>}
                         <AppButton onPress={handleSubmit as any}>
-                            <ThemedText type="subtitle">Login</ThemedText>
+                            <ThemedText type="subtitle" style={{color: "#fff"}}>SignUp</ThemedText>
                         </AppButton>
-                        <ThemedText style={{textAlign: "center"}} type="link" onPress={()=> navigation.navigate("signup")} >Register your account</ThemedText>
+                        <Link style={{ textAlign: "center" }} href={"/"} >
+                            <ThemedText type="link" onPress={()=> navigation.navigate("index")} >Already have an account?</ThemedText>
+                        </Link>
                     </>)}
                         </ Formik>
         </ThemedTile>

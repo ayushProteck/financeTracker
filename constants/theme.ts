@@ -17,7 +17,7 @@ export const Colors = {
     tabIconDefault: '#687076',
     tabIconSelected: tintColorLight,
     placeholder: "#464646ff",
-    tile: "#ccc"
+    tile: "#eee"
   },
   dark: {
     text: '#fff',
@@ -29,6 +29,11 @@ export const Colors = {
     placeholder: "#ffffffa8",
     tile: "#333"
   },
+  primary: '#0a7ea4',
+  secondary: '#5a5a5aff',
+  cancel: '#ff3b30',
+  expense: "#d00",
+  income: "#090"
 };
 
 export const Fonts = Platform.select({

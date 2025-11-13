@@ -8,19 +8,21 @@ export type AppButtonProps = TouchableOpacityProps & {
 export default function AppButton({
     type = 'primary',
     size = 'medium',
+    style = {},
     ...rest
 } : AppButtonProps) {
     const backgroundColor = backgroundColors[type];
     
     return <TouchableOpacity 
-        style={{
+        style={[{
             backgroundColor: backgroundColor, 
             padding: 12, 
             marginTop: 10,
             margin: 5,
             borderRadius: 8, 
-            alignItems: 'center'
-        }}
+            alignItems: 'center',
+            
+        }, style]}
         {...rest}/>;
 }
 
