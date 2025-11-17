@@ -78,7 +78,7 @@ const MonthlyIncomeExpenseBarChart: React.FC<Props> = ({ transactions = [], }) =
     return Math.ceil(max / 2000) * 2000;
   }, [chartData, hasMeaningfulValues]);
 
-  const formatYAxisLabel = (val: number) => (val >= 1000 ? `${val / 1000}k` : val.toString());
+  const formatYAxisLabel = (val: string) => (Number(val) >= 1000 ? `${Number(val) / 1000}k` : val.toString());
 
   return (
     <View style={styles.section}>
