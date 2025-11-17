@@ -19,7 +19,7 @@ import * as Yup from 'yup';
 const TransactionSchema = Yup.object().shape({
   amount: Yup.number().positive('Amount must be positive').required('Required'),
   type: Yup.string().oneOf(['income', 'expense']).required('Required'),
-  category: Yup.string().oneOf(['food', 'entertainment', 'party', 'repaire', 'buying', 'others']).required('Required'),
+  category: Yup.string().oneOf(['food', 'entertainment', 'party', 'repaire', 'buying', 'others', 'salary']).required('Required'),
   description: Yup.string().required('Required'),
 });
 
